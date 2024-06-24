@@ -1,0 +1,47 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>NEWS</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'create' %}">Create</a></li>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">logout</button>
+                    </form>
+                {% else %}
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% comment %} <li><a href="{% url 'social:begin' 'github' %}">Login with GitHub</a></li> {% endcomment %}
+
+                {% endif %}
+            </ul>
+        </nav>
+        {% if user.is_authenticated %}
+            <div class="profile-container"> 
+                <aside class="profile-info">
+                    <h2>Profile Information</h2>
+                    <a href="{% url 'profile' user.id  %}">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s Avatar" style="max-width: 150px; max-height: 150px;">
+                        {% else %}
+                            <img src="{% static 'path/to/default/avatar.png' %}" alt="Default Avatar" style="max-width: 150px; max-height: 150px;">
+                        {% endif %}
+                    </a>
+                    <p><strong>Username:</strong> {{ user.username|escape }}</p>
+                    <p><strong>Nickname:</strong> {{ user.nick|default:"No nickname provided"|escape }}</p>
+                    <p><strong>Bio:</strong> {{ user.bio|default:"No bio available"|linebreaks|escape }}</p>
+                </aside>
+            </div>
+        {% endif %}
+    </header>

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}News List{% endblock %}
+{% block content %}
+<h1 class="mb-4">News List</h1>
+<div class="list-group">
+    {% for item in news %}
+                <h2 class="mb-1">{{ item.author }}</h2>
+            <a href="{% url 'detail' item.pk %}" class="list-group-item list-group-item-action">
+            <img src="{{ item.image.url }}" class="img-fluid mb-1" height=500 wigth=500 alt="{{ item.title }}" >
+            <h5 class="mb-1">{{ item.title }}</h5>
+            <p class="mb-1">{{ item.description|truncatewords:30 }}</p>
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}
+ 
